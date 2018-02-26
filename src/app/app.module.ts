@@ -7,7 +7,9 @@ import {MatButtonModule} from '@angular/material/button';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './/app-routing.module';
 import {AlbumsModule} from './albums/albums.module';
-
+import {SharedModule} from './shared/shared.module';
+import {MatIconModule, MatListModule, MatSidenavModule} from '@angular/material';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,12 @@ import {AlbumsModule} from './albums/albums.module';
     BrowserAnimationsModule,
     MatButtonModule,
     AppRoutingModule,
-    AlbumsModule
+    AlbumsModule,
+    SharedModule,
+    MatSidenavModule,
+    MatListModule,
+    MatIconModule,
+    FlexLayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]
