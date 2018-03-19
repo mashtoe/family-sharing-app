@@ -7,11 +7,15 @@ import {LoginComponent} from './auth/login/login.component';
 import {AuthGuard} from './auth/shared/auth-guard.service';
 import {SignupComponent} from './auth/signup/signup.component';
 import {LoggedInGuard} from './auth/shared/logged-in.guard';
+import {ProfileComponent} from './user/profile/profile.component';
+import {UserModule} from './user/user.module';
 
 const routes: Routes = [
   { path: 'albums', component: AlbumsListComponent, canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
   { path: 'login', component: LoginComponent, canActivate: [LoggedInGuard] },
-  { path: 'signup', component: SignupComponent}
+  { path: 'signup', component: SignupComponent, canActivate: [LoggedInGuard]},
+  { path: '', redirectTo: '/albums', pathMatch: 'full'}
 
 ];
 
@@ -19,7 +23,8 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forRoot(routes),
-    AuthModule
+    AuthModule,
+    UserModule
   ],
   declarations: [],
   exports: [RouterModule]

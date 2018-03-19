@@ -4,6 +4,7 @@ import {MatSnackBar} from '@angular/material';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {matchPassword} from '../shared/passwordValidator';
+import {User} from '../../user/shared/user';
 
 @Component({
   selector: 'fpa-signup',
@@ -27,8 +28,8 @@ export class SignupComponent implements OnInit {
   }
 
   signup() {
-    const model = this.signupForm.value;
-    this.authService.signup(model.email, model.password)
+    const model = this.signupForm.value as User;
+    this.authService.signup(model)
       .then(user => {
         this.router.navigateByUrl('albums')
           .then(() => {
@@ -41,7 +42,7 @@ export class SignupComponent implements OnInit {
       });
   }
 
-  fcErr(fc: string, error: string, pre: string[]): boolean {
+  fcErr(fc: string, error: string, pre?: string[]): boolean {
     if (pre && pre.length >  0) {
       for (let i = 0; i < pre.length; i++) {
         if (this.signupForm.get(fc).hasError(pre[i])) {
