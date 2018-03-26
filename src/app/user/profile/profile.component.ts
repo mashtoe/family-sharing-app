@@ -4,16 +4,27 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {User} from '../shared/user';
 import {UserService} from '../shared/user.service';
 import {Subscription} from 'rxjs/Subscription';
+import {state, style, transition, trigger, animate} from "@angular/animations";
 
 @Component({
   selector: 'fpa-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
+  animations: [trigger('imageHover', [
+    state('hoveringImage', style({
+      opacity: 0.3
+    })),
+    state('notHoveringImage', style({
+      opacity: 1
+    })),
+    transition('hoveringImage <=> notHoveringImage', animate('200ms ease-in'))
+  ])]
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   profileForm: FormGroup;
   user: User;
   userSub: Subscription;
+  isHovering: boolean;
 
   constructor(private userService: UserService,
               private fb: FormBuilder) {
@@ -37,8 +48,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.userSub.unsubscribe();
   }
 
-  unchanged(){
+  hovering(isHovering: boolean) {
+    this.isHovering = isHovering;
+  }
 
+  unchanged(): boolean {
+    const model = this.profileForm.value as User;
+    return model.username === this.user.username &&
+      model.firstName === this.user.firstName &&
+      model.middleName === this.user.middleName &&
+      model.lastName === this.user.lastName;
   }
 
   save() {
@@ -59,5 +78,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
     return this.profileForm.get(fc).hasError(ec);
   }
+
 
 }
