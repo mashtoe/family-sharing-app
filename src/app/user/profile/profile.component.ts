@@ -5,6 +5,8 @@ import {User} from '../shared/user';
 import {UserService} from '../shared/user.service';
 import {Subscription} from 'rxjs/Subscription';
 import {state, style, transition, trigger, animate} from "@angular/animations";
+import {MatSnackBar} from '@angular/material';
+import {FileService} from '../../file-system/file.service';
 
 @Component({
   selector: 'fpa-profile',
@@ -25,9 +27,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
   user: User;
   userSub: Subscription;
   isHovering: boolean;
+  img: string;
+  srcloaded: boolean;
 
   constructor(private userService: UserService,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private snack: MatSnackBar,
+              private fileService: FileService) {
     this.profileForm = fb.group({
       username: ['', [Validators.required, Validators.minLength(4)]],
       firstName: '',
@@ -37,9 +43,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userSub = this.userService.getUser()
+    this.userSub = this.userService.getUserWithProfileUrl()
       .subscribe(user => {
         this.user = user;
+        this.img = user.profileImgUrl;
         this.profileForm.patchValue(user);
       });
   }
@@ -58,6 +65,28 @@ export class ProfileComponent implements OnInit, OnDestroy {
       model.firstName === this.user.firstName &&
       model.middleName === this.user.middleName &&
       model.lastName === this.user.lastName;
+  }
+
+  uploadNewImage(filelist) {
+    if (filelist &&  filelist.length === 1 && ['image/jpeg', 'image/png'].indexOf(filelist.item(0).type) > -1) {
+      this.srcloaded = false;
+      const file = filelist.item(0);
+      const path = 'profile-image/' + this.user.uid;
+      this.fileService.upload(path, file).downloadUrl.subscribe(
+        url => {
+          console.log('url', url);
+          this.img = url;
+          this.hovering(false);
+        }
+      );
+    } else {
+      console.log('wrooooong');
+      this.snack.open('You need to drop a single png or jpeg image', null, {
+        duration: 4000
+      });
+      this.hovering(false);
+    }
+    console.log('hi: ', filelist);
   }
 
   save() {

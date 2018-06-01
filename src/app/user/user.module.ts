@@ -2,13 +2,22 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {UserService} from './shared/user.service';
 import {ProfileComponent} from './profile/profile.component';
-import {MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSnackBarModule} from '@angular/material';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule, MatProgressSpinnerModule,
+  MatSnackBarModule
+} from '@angular/material';
 import {RouterModule} from '@angular/router';
 import {ReactiveFormsModule} from '@angular/forms';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {AngularFirestoreModule} from 'angularfire2/firestore';
 import {SharedModule} from '../shared/shared.module';
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {FileSystemModule} from '../file-system/file-system.module';
 
 @NgModule({
   imports: [
@@ -24,7 +33,10 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     MatIconModule,
     AngularFirestoreModule,
     SharedModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatTooltipModule,
+    FileSystemModule,
+    MatProgressSpinnerModule
   ],
   declarations: [ProfileComponent],
   providers: [UserService]

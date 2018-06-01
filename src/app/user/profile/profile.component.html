@@ -2,12 +2,20 @@
   <mat-card  fxFlex="80">
     <mat-card-header>
       <img
+        [hidden]="!srcloaded"
+        matTooltip="Drop image here"
         [@imageHover]="isHovering ? 'hoveringImage' : 'notHoveringImage'"
         fpaUpload
         (hovering)="hovering($event)"
+        (dropped)="uploadNewImage($event)"
         mat-card-avatar
-        src="https://firebasestorage.googleapis.com/v0/b/familyphotosharingapp.appspot.com/o/blue.jpg?alt=media&token=61af3c38-919d-4707-a5bd-a259f84cce15"
-        alt="Photo of a Shiba Inu">
+        [src]="isHovering ? '/assets/baseline-cloud_upload-24px.svg' : img"
+        alt="Photo of a Shiba Inu"
+        (load)="srcloaded = true">
+      <mat-spinner
+        mat-card-avatar
+        diameter="40"
+        *ngIf="!srcloaded"></mat-spinner>
       <mat-card-title>{{user.username}}</mat-card-title>
       <mat-card-subtitle>{{user.email}}</mat-card-subtitle>
     </mat-card-header>
